@@ -1,0 +1,47 @@
+@(request : play.mvc.Http.Request)
+
+<h1>Информация о запросе к серверу</h1>
+
+<h3>Заголовки</h3>
+@for((key, value) <- request.headers()) {
+    @key => @value <br/>
+}
+
+<h3>Поддерживаемые языки</h3>
+@for(lang <- request.acceptLanguages()) {
+    @lang <br/>
+}
+
+<h3>Куки</h3>
+cookies()
+
+<h3>Строка запроса (GET/POST)</h3>
+
+@for((key, value) <- request.queryString()) {
+    @key => @value <br/>
+}
+
+<h3>Accepts</h3>
+
+@for(a <- request.accept()) {
+    @a <br/>
+}
+
+
+<h3>Другое</h3>
+
+URL = @request.uri()<br/>
+
+Метод = @request.method()<br/>
+
+Удалённый адрес = @request.remoteAddress()<br/>
+
+Узел = @request.host()<br/>
+
+Путь = @request.path()<br/>
+
+@request.username()<br/>
+
+
+
+

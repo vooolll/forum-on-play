@@ -1,0 +1,33 @@
+@import play.i18n._
+
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner">
+    <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">Такой-то форум</a>
+        <div class="nav-collapse">
+            <ul class="nav">
+                <li class="active"><a href="#">Меню 1</a></li>
+                <li><a href="#">Меню 2</a></li>
+                <li><a href="#">Меню 3</a></li>
+
+            </ul>
+            <div class="nav pull-right">
+				@if(User.loggedUser() != null ) {
+    				<p class="navbar-text"> <a href="@routes.Users.cabinet()">@User.loggedUser.fullName</a></p>
+				} else {
+                <form xmlns="http://www.w3.org/1999/xhtml" class="navbar-search form-search form-inline pull-right" method="POST" action="@routes.Users.authorize()">
+                <input type="text" name="email" placeholder="@Messages.get("user.login.email")" class="input-small"/>
+                <input type="password" name="password" placeholder="@Messages.get("user.login.password")" class="input-small"/>
+                    <button class="btn" type="submit">@Messages.get("user.login.inlet")</button>
+                </form>
+				}
+            </div>
+        </div><!-- /.nav-collapse -->
+    </div>
+</div><!-- /navbar-inner -->
+</div><!-- /navbar -->

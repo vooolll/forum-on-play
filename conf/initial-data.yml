@@ -1,0 +1,90 @@
+
+# Пользователи
+
+users:
+
+    - !!models.User
+        email:       admin@example.ru
+        fullName:    Администратор
+        password:    secret
+        role:        !!models.User$Role 'ADMIN'
+
+    - !!models.User
+        email:       moderator@example.ru
+        fullName:    Модератор
+        password:    secret
+        role:        !!models.User$Role 'MODERATOR'
+
+    - !!models.User
+        email:       user@example.ru
+        fullName:    Простой пользователь
+        password:    secret
+        role:        !!models.User$Role 'USER'
+
+
+
+# Разделы форума
+
+sections:
+
+    - !!models.Section
+        id:          1
+        name:        Chat Free theme to talk
+        description: Болтаем обо всём  в нашей курилке, то есть здесь. Кстати мы строго против курения в реальном мире
+
+    - !!models.Section
+        id:          2
+        name:        Teachers Talking about teachers and their methods of teaching
+        description: 'Форум для преподавателей: об обучении и методах преподавания'
+
+    - !!models.Section
+        id:          3
+        name:        Programming languages Books, tutorials, examples
+        description: 'Материалы для обучения программированию: книги, учебники, примеры. Приветствуется размещение ссылок на бесплатные источники, на публичные библиотеки и репозитарии'
+
+    - !!models.Section
+        id:          4
+        name:        Exams all info related to exam
+        description: Экзамены, как много в этом слове для бедного, озябшего замученного преподавателями, взъерошенного студента...
+
+    - !!models.Section
+        id:          5
+        name:        Subjects Discustions of courses, home work, all info related to this courses
+        description: XXX
+
+#
+# Темы
+#
+topics:
+
+    - !!models.Topic
+        name: C/C++
+        section: !!models.Section
+                 id: 3
+        author: !!models.User
+                 email: admin@example.ru
+#
+# Посты
+#
+posts:
+
+    - !!models.Post
+        id:   1
+        text: Препроцессор языка С++\n\n\n Условия\n\nВ работе препроцессора "условием" называется директива, при выполнении которой часть программы игнорируется во время компиляции после проверки некоторых условий. В С препроцессоре в условии могут использоваться как арифметические выражения, так и имена определенных макросов.
+        topic:  !!models.Topic
+                name: C/C++
+        author: !!models.User
+                email: admin@example.ru
+
+#
+# Коментарии
+#
+comments:
+
+    - !!models.Comment
+        text: 'Подскажите, что делает #define TRUE FALSE ???'
+        post:  !!models.Post
+                id: 1
+        author: !!models.User
+                email: admin@example.ru
+

@@ -1,0 +1,31 @@
+@(section: Section)
+@import helper._
+@main.carcass("Very simple forum") {
+	<h1 align="center">@section.name</h1>
+	<hr>
+	
+	<div>
+		<div class="span12">
+			<p class="lead">Темы раздела:</p>
+		</div>
+	     
+     	<div class="span12">
+     	<div>
+				<a  class="btn btn-primary" href="add/@section.id">Новая тема</a>
+		</div> <br>
+   			<ul class="nav nav-tabs nav-stacked">
+    		@if(section.topics != null) {
+        		@for(topic <- section.topics) {
+        			@if(String.valueOf(topic.author.id).equals(session().get("userId"))) {
+            			<div align="right"><p class="icon-pencil"></p><a href="edit/@topic.id" ">edit</a></div>
+            		}
+            		<li><a href="posts/@topic.id">@topic.name</a><p align="right">@topic.posts.size() пост(ов)</p></li>
+            	
+       			}
+    		}
+    		</ul>
+		</div>
+
+	 	
+	</div>
+}

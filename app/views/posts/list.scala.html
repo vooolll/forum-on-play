@@ -1,0 +1,77 @@
+@(topic: Topic)
+<!-- title-���������, myForm-scala ������ �����, dataList-���� � ������� ���� -->
+@import helper._
+@import java.util._
+@main.carcass(topic.name) {
+	<div align="center">
+		<h1>@topic.name</h1>
+		
+		<hr>
+	</div>
+	
+	<div class="container-fluid">
+		<p class="lead">Все сообщения по данной теме:</p>
+		<a class="btn btn-primary" href="/topics/posts/add/@topic.id">Новое сообщение</a>
+		
+		@if(topic.posts != null) {
+        		@for(post <- topic.posts) {
+        		<!-- field of class Post -->	
+        		
+        		
+        		
+    	<div >
+    		<div class="row">
+    			<div class="span3">
+    			<hr>
+    				<p ><b>@post.author.fullName</b></p>
+    			</div>
+    			<div class="span5">
+    			<hr>
+    				@if(String.valueOf(post.author.id).equals(session().get("userId"))) {
+            			<div align="right"><p class="icon-pencil"></p><a href="edit/@post.id" ">edit</a></div>
+            		}
+            		<p>@post.text</p>
+            		 <p align="right" class="text-small">@Post.getFormatedDate(post.createdAt)</p>
+            		@if(post.attachedImagePath != String.valueOf(post.id)) {
+            		<a href="#increase@post.id"  data-toggle="modal">
+            			<img class="img-polaroid" alt="img" src="@routes.Assets.at("images/post/"+post.attachedImagePath)" width="200" height="400">
+            			<br>
+            		</a>
+            		}
+            		<div id="increase@post.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            			<div class="modal-header">
+    						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    						
+  						</div>
+            			<div class="modal-body">
+    						<img alt="img" src="@routes.Assets.at("images/post/"+post.attachedImagePath)">
+  						</div>
+            		</div>
+            		<a href="/topics/posts/comment/@post.id">add comment</a>
+            		<hr>
+            		
+            	</div>
+            	<div class="span1">
+            		<a id="b" class="icon-thumbs-up" href="/topics/posts/like/@post.id/@topic.id"></a> 
+            		   <p>@post.usersLiked.size()</p> <br>
+            		  
+            	</div>
+            	
+            </div>
+            	@for(comment <- post.comments) {
+            <div class="row">
+            
+            	<div class="span3"></div>
+            	<div class="span5">	
+            		<p id="comment-text" class="muted"><i class="icon-comment"></i> - @comment.text - <b class="text-info" id="comment-autor">@comment.author.fullName</b>
+            		<b> @Post.getFormatedDate(comment.createdAt)</b></p>
+            		
+            	</div>
+            </div>
+            	}
+    	</div>
+    	}	
+    	</div>
+    	}
+
+}

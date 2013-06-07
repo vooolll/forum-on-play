@@ -1,0 +1,15 @@
+@(topic: Topic, postForm: Form[Post])
+@import helper._
+@import play.i18n._
+
+@main.carcass(topic.name) {
+	<h1 align="center"> Новое сообщение </h1>
+    <div class="span12">
+    	<p class="lead"> Введите ваше сообщение: </p>
+            @form(action = routes.Posts.save(topic.id), 'enctype -> "multipart/form-data") {
+                @textarea(field = postForm("text"), '_label -> Messages.get("comment.creation.text"))
+				<input type="file" name="picture" >
+                <input class="btn btn-primary" type="submit" value="Отправить">
+            }
+    </div>
+}

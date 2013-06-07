@@ -1,0 +1,45 @@
+@(sections: List[Section], user: User)
+
+@main.carcass("Форум") {
+
+	<div class="span12">
+		<div align="right">
+			@if(User.loggedUser() == null ) {
+				<a href="/registration">Регистрация</a>
+			}
+		</div>
+	<div>
+	
+	<h1 align="center">Форум</h1>	
+	<hr>
+	
+	<div class="span12">
+		<p class="lead">Разделы форума:</p>
+	</div>
+	
+	<div class="accordion" id="accordion2">
+		@for(section <- sections) {
+		<div class="span12">
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<p class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2">
+						<b>@section.name</b>
+					</p>
+				</div>
+				<div id="collapseOne" class="accordion-body collapse in">
+					<div class="accordion-inner">
+						<p>
+							@section.description 
+								<a href="/topics/@section.id">
+									@section.name
+								</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		}
+	</div>
+	
+
+}

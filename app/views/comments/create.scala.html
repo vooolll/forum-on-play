@@ -1,0 +1,15 @@
+@(post: Post,commentForm: Form[Comment])
+@import helper._
+@import play.i18n._
+
+@main.carcass("Forum") {
+	<div class="span12">
+		<h1>Добавьте ваш коментарий</h1>
+		<p class="lead">@post.text</p>
+		@form(action = routes.Comments.save(post.id)) {
+			@textarea( field = commentForm("text"), '_label -> Messages.get("comment.creation.text") )
+		
+			<input class="btn btn-primary" type="submit" value="Отправить" >
+		}
+	</div>
+}

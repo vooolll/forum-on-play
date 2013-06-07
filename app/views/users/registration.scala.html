@@ -1,0 +1,43 @@
+@(regForm: Form[Users.Registration])
+
+@import helper._
+@import helper.twitterBootstrap._
+@import play.i18n._
+
+@implicitFieldConstructor = @{ FieldConstructor(main.bootstrap2.render) }
+
+@main.carcass(title = Messages.get("user.registration.title")) {
+
+
+<div class="row">
+    <div class="span5 offset3">
+
+        <h2>@Messages.get("user.registration.title")</h2>
+
+        @if(regForm.hasGlobalErrors) {
+            <div class="alert alert-error">
+                @regForm.globalError.message
+            </div>
+        }
+
+@form(action = routes.Users.registrationProcessed(), args = 'class ->"form-vertical") {
+            <fieldset>
+                @inputText( field = regForm("fullName"), args =
+                    '_label -> Messages.get("user.registration.name"),
+                    '_help -> Messages.get("user.registration.name.help")
+                )
+                @inputText( field = regForm("email"), args =
+                        '_label -> Messages.get("user.registration.email"),
+                        '_help -> Messages.get("user.registration.email.help")
+                )
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">@Messages.get("interface.save")</button>
+                    <button class="btn" type="reset">@Messages.get("interface.cancel")</button>
+                </div>
+            </fieldset>
+}
+
+    </div>
+
+</div>
+}

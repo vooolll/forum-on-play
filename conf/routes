@@ -1,0 +1,64 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+
+###############################################################################
+# Действия с пользователями
+###############################################################################
+
+# TODO Вход
+GET     /login                        controllers.Users.login(redirect ?= "")
+POST    /login                        controllers.Users.authorize()
+
+# Выход
+GET     /logout                       controllers.Users.logout()
+
+# Регистрация нового пользователя
+GET     /registration                 controllers.Users.registration()
+POST    /registration                 controllers.Users.registrationProcessed()
+
+# Активация логина (для регистрции, где пользовтель сам забивает пароль
+#GET     /activation_login/:key        controllers.Users.activationLogin(key: String)
+
+# TODO Восстановление пароля
+GET     /forgot_password              controllers.Users.forgotPassword()
+GET     /change_password              controllers.Users.changePassword()
+
+# TODO Личный кабинет
+GET     /cabinet                      controllers.Users.cabinet()
+
+# TODO Страница о пользователе
+GET     /user/:id                     controllers.Users.show(id: Long)
+
+
+###############################################################################
+# Разделы форума
+###############################################################################
+GET    /							  controllers.Sections.list()
+
+###############################################################################
+# Темы форума
+###############################################################################
+GET    /topics/:id		              controllers.Topics.list(id: Long)
+GET    /topics/add/:id 			      controllers.Topics.create(id:Long)
+GET    /topics/edit/:id               controllers.Topics.edit(id:Long)
+POST   /topics/save/:id 			  controllers.Topics.save(id: Long)
+
+###############################################################################
+# Сообщения форума
+###############################################################################
+GET    /topics/posts/:id 			  controllers.Posts.list(id: Long)
+GET    /topics/posts/add/:id          controllers.Posts.create(id: Long)
+POST   /topics/posts/save/:id         controllers.Posts.save(id: Long)
+GET    /topics/posts/like/:id/:tID    controllers.Posts.like(id: Long,tID: Long)
+GET    /topics/posts/edit/:id         controllers.Posts.edit(id:Long)
+
+###############################################################################
+# Коментарии форума
+###############################################################################
+GET    /topics/posts/comment/:id            controllers.Comments.create(id: Long)
+POST   /topics/posts/comment/save/:id       controllers.Comments.save(id: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                   controllers.Assets.at(path="/public", file)

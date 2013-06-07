@@ -1,0 +1,9 @@
+@(nav: String = "")
+<h3> Личный кабинет </h3>
+<ul class="nav nav-list">
+    <li class="@("active".when(nav == routes.Users.cabinet()))"> <a href="@routes.Users.cabinet()"> <i class="icon-white icon-home"></i> Главное</a></li>
+    <li><a href="#"> <i class="icon-home"></i> Коментарии моих тем</a></li>
+    <li><a href="#"> <i class="icon-home"></i> Мои темы</a></li>
+    <li><a href="@routes.Users.changePassword()"> <i class="icon-search"></i> Смена пароля</a></li>
+    <li><a href="@routes.Users.logout()"> <i class="icon-home"></i> Выход</a></li>
+</ul>

@@ -1,0 +1,92 @@
+.font{
+	font-family: Courier;
+	background-color:#F8F8F8 ;
+
+}
+.heading {
+	text-align: center;
+}
+.header {
+	magrin:2px;
+	background-color:#F0F0F0;
+	width: 1260px;
+	height: 120px;
+}
+.con-style {
+	margin:50px;
+	margin-left: 100px;
+}
+.text {
+	padding:20px;
+}
+.btn {
+	padding-top:20px;
+}
+#myForm1 {
+	background-image:url(images/form_bg.jpg);
+	background-repeat:repeat-x;
+	border:1px solid #d1c7ac;
+	width: 300px;
+	margin: 7px;
+	height:30px;
+	color:#333333;
+	padding:3px;
+	margin-right:4px;
+	margin-bottom:8px;
+	font-family:Courier;
+	font-size:15px;
+}
+.con-style1 {
+	margin-left:100px
+}
+.sender {
+	font-size:25px;
+	
+}
+.sender:hover {
+	font-size:30px;
+	text-decoration:underline;
+}
+.post {
+	word-wrap:break-word;
+    width: 600px;
+    hieght: 100px;
+}
+#myForm {
+	background-image:url(images/form_bg.jpg);
+	background-repeat:repeat-x;
+	border:1px solid #d1c7ac;
+	width: 500px;
+	margin: 7px;
+	height:200px;
+	color:#333333;
+	padding:3px;
+	margin-right:4px;
+	margin-bottom:8px;
+	font-family:Courier;
+	font-size:15px;
+}
+.regi-div {
+	float:left;
+	margin-top: 100px;
+	margin-left: 250px;
+}
+.login-div {
+	float:left;
+	margin-top: 100px;
+	margin-left: 250px;
+}
+#myForm3 {
+	background-image:url(images/form_bg.jpg);
+	background-repeat:repeat-x;
+	border:1px solid #d1c7ac;
+	width: 200px;
+	margin: 7px;
+	height:25px;
+	color:#333333;
+	padding:3px;
+	margin-right:4px;
+	margin-bottom:8px;
+	font-family:Courier;
+	font-size:15px;
+}

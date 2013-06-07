@@ -1,0 +1,19 @@
+@(formTopic: Form[Topic],section: Section)
+@import helper._
+@import play.i18n._
+@main.carcass(section.name) {
+	<div >
+		<h1 align="center">@section.name</h1>
+	</div>
+	<hr>
+	
+	<div class="span12">
+		<p class="lead">Введите название темы:</p>
+    	@form(action = routes.Topics.save(section.id),args = 'class ->"form-vertical") {
+				@inputText( field = formTopic("name"), args =
+                        '_label -> Messages.get("topic.creation.text") )
+	
+		<input class="btn btn-primary" type="submit" value="Новая тема">
+		}
+	</div>
+}

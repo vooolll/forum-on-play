@@ -1,0 +1,45 @@
+@(loginForm: Form[Users.Login])
+
+
+@import helper._
+@import helper.twitterBootstrap._
+@import play.i18n._
+
+@main.carcass(title = Messages.get("user.login.title")) {
+
+<div class="row">
+    <div class="span7 offset3">
+        <h2>@Messages.get("user.login.title")</h2>
+        <br/>
+
+        @if(loginForm.hasGlobalErrors) {
+            <div class="alert alert-error">
+                @loginForm.globalError.message
+            </div>
+        }
+
+    @form(action = routes.Users.authorize(), args = 'class ->"form-vertical") {
+            <fieldset>
+                @inputText(field = loginForm("email"),
+                    args = 'class -> "input-xxlarge", '_label -> Messages.get("user.login.email")
+                )
+                @inputPassword(field = loginForm("password"),
+                    args = 'class -> "input-xxlarge", '_label -> Messages.get("user.login.password")
+                )
+
+                <input type="hidden" name="redirect" value="@loginForm("redirect").value">
+
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-large" type="submit">@Messages.get("user.login.inlet")</button>
+                    <a class="btn" href="@routes.Users.forgotPassword()">@Messages.get("user.login.forgot")</a>
+                    <a class="btn" href="@routes.Users.registration()">@Messages.get("user.login.needRegistration")</a>
+                </div>
+
+            </fieldset>
+    }
+   </div>
+ 
+
+</div>
+
+}
