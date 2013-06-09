@@ -47,19 +47,17 @@ public class Posts extends Controller {
 	 * 
 	 */
 	public static Result save(Long id) {
-		
 		Form<Post> filledPost = formPost.bindFromRequest();
-		if (filledPost.hasErrors()) {
+		if (filledPost.hasErrors()) 
 			return badRequest(create.render(Topic.find.byId(id), filledPost));
-		} else {
-			Post post = filledPost.get();
-			post.topic = Topic.find.byId(id);
-			post.author = User.loggedUser();
-			post.save();
-			upload(post.id, "/public/images/post/",post);
-			post.save();
-			return redirect(routes.Posts.list(id));
-		}
+
+		Post post = filledPost.get();
+		post.topic = Topic.find.byId(id);
+		post.author = User.loggedUser();
+		post.save();
+		upload(post.id, "/public/images/post/",post);
+		post.save();
+		return redirect(routes.Posts.list(id));
 	}
 
 	/**
@@ -67,9 +65,8 @@ public class Posts extends Controller {
 	 */
 	public static Result like(Long id, Long tID) {
 		Post post = Post.find.byId(id);
-		if(!post.usersLiked.contains(User.loggedUser())) {
+		if(!post.usersLiked.contains(User.loggedUser()))
 			post.usersLiked.add(User.loggedUser());
-		}
 		post.save();
 		return redirect(routes.Posts.list(tID));
 	}

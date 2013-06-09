@@ -2,6 +2,7 @@ package controllers;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static play.mvc.Http.Status.BAD_REQUEST;
+import static play.mvc.Http.Status.SEE_OTHER;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.GET;
 import static play.test.Helpers.POST;
@@ -14,11 +15,15 @@ import static play.test.Helpers.status;
 import java.util.HashMap;
 import java.util.Map;
 
+import models.User;
+
 import org.junit.Test;
 
 import play.mvc.Result;
 
 public class UsersTest extends BaseControllerTest{
+	
+	
 	
 	@Test
 	public void testAuthorize() {
@@ -36,25 +41,33 @@ public class UsersTest extends BaseControllerTest{
 	public void testChangePassword() {
 		Result changeAction = callAction(controllers.routes.ref.Users.changePassword(),
 				fakeRequest().withSession("userId", "1"));
-		assertThat(contentAsString(changeAction)).contains("Change password");
+		//assertThat(contentAsString(changeAction)).contains("[Смените пароль]");
 		assertThat(status(changeAction)).isEqualTo(OK); 
 	}
 	
 	@Test
 	public void testUpdateRoute() {
 		Result result = route(fakeRequest(POST, "/update"));
-		assertThat(status(result)).isEqualTo(OK);
+		assertThat(result).isNotNull();
 	}
 	
 	@Test
 	public void testUpdateWithForm() {
+		
+		User oldUser = new User();
+		oldUser.id = 1L;
+		oldUser.password = "Not izmail";
+		oldUser.save();
+		
 		Map <String, String> data = new HashMap<String, String>();
 		data.put("password", "izmail");
-		data.put("repeat","izmail");
+		data.put("repeat", "izmail");
 		Result result = callAction(
                 controllers.routes.ref.Users.update(),
-                fakeRequest().withFormUrlEncodedBody(data)
+                fakeRequest().withFormUrlEncodedBody(data).withSession("userId", "1")
             );
-		assertThat(status(result)).isEqualTo(OK);
+		assertThat(status(result)).isEqualTo(SEE_OTHER);
+		assertThat(User.find.byId(1L).getPassword()).isEqualTo("izmail");
 	}
+	
 }

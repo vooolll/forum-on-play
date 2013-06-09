@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 import models.User;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.db.ebean.Model.Finder;
@@ -15,18 +16,23 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.errors.page404;
 import views.html.main.success;
+import views.html.users.changePass;
 import views.html.users.login;
 import views.html.users.registration;
 import views.html.users.registrationLetter;
 import views.html.users.show;
 import views.html.users.cabinet.index;
-import views.html.users.changePass;
 
 import com.typesafe.plugin.MailerAPI;
 import com.typesafe.plugin.MailerPlugin;
 
 
 public class Users extends Controller {
+	
+    
+    public static Finder<String, User> find = new Finder<String, User>(String.class, User.class);
+	
+	
     /*
      * Форма для регистрации пользователя
      */
@@ -50,6 +56,7 @@ public class Users extends Controller {
         }
     }
 
+    
     /*
      * Форма для автозризации пользователя
      */
@@ -63,33 +70,27 @@ public class Users extends Controller {
 
         public String validate() {
             user = User.authorize(email, password);
-            if (user == null) {
-                return Messages.get("user.login.invalidLogin");
-            }
+            if (user == null) return Messages.get("user.login.invalidLogin");
             return null;
         }
 
     }
 
+    
     /**
      * Показ формы логина
      */
     public static Result login(String redirect) {
         // Если юзер уже авторизирован, но опять ломанулся логиниться, отправим его на главную
-        if (User.loggedUser() != null) {
+        if (User.loggedUser() != null) 
             return redirect(routes.Sections.list());
-        } else {
-            Map<String, String> m = new HashMap<String, String>();
-            m.put("redirect", redirect);
-            Form<Login> loginForm = Form.form(Login.class).bind(m);
-
-//            return ok(views.html.debug.request.render(request()));
-            return ok(login.render(loginForm));
-        }
+        Map<String, String> m = new HashMap<String, String>();
+        m.put("redirect", redirect);
+        Form<Login> loginForm = Form.form(Login.class).bind(m);
+        return ok(login.render(loginForm));
     }
-
-    public static Finder<String, User> find = new Finder<String, User>(String.class, User.class);
-
+    
+    
     /**
      * Обработка формы логина и авторизация пользователя
      */
@@ -108,16 +109,16 @@ public class Users extends Controller {
             user.visitCount++;
             user.update();
             
+            // если пользователь 1 раз , редайректим на смену пароля
+            if (user.isFirstVisit()) return redirect(routes.Users.changePassword());
             
             // Переадресация после логина
-            if (loginForm.get().redirect == null || loginForm.get().redirect.isEmpty()) {
-                return redirect(routes.Sections.list());
-            } else {
-                return redirect(loginForm.get().redirect);
-            }
+            if (loginForm.get().redirect == null || loginForm.get().redirect.isEmpty())  return redirect(routes.Sections.list());
+            else return redirect(loginForm.get().redirect);
         }
     }
 
+    
     /**
      * Выход из программы.
      * Очищается сессия и пользователь перенаправляется на главную страницу
@@ -130,6 +131,7 @@ public class Users extends Controller {
         return redirect("/"); // routes.Application.topics(part)
     }
 
+    
     /**
      * Показать форму регистрации
      */
@@ -137,49 +139,69 @@ public class Users extends Controller {
         return ok(registration.render(Form.form(Registration.class)));
     }
 
+    
     /**
      * Обработка формы регистрации пользователя
      */
     public static Result registrationProcessed() {
         Form<Registration> registrationForm = Form.form(Registration.class).bindFromRequest();
-        if (registrationForm.hasErrors()) {
+        if (registrationForm.hasErrors()) 
             return badRequest(registration.render(registrationForm));
-        } else {
-            // Сохранение записи в БД
-            User user = new User();
-            user.email = registrationForm.get().email;
-            user.fullName = registrationForm.get().fullName;
-            user.password = generateRandomString(8);
-            user.save();
-
-            // Высылка письма
-            sendRegistrationLetter(user);
-
-            // Сообщение юзеру
-            return ok(success.render(
-                    "Регистрация прошла успешно",
-                    "Регистрация прошла успешно! В течении нескольких минут вам придёт письмо на электронную почту."
-            ));
-        }
+        // Сохранение записи в БД
+        User user = new User();
+        user.email = registrationForm.get().email;
+        user.fullName = registrationForm.get().fullName;
+        user.password = generateRandomString(8);
+        user.save();
+        // Высылка письма
+        sendRegistrationLetter(user);
+        // Сообщение юзеру
+        return ok(success.render(
+                 "Регистрация прошла успешно",
+                 "Регистрация прошла успешно! В течении нескольких минут вам придёт письмо на электронную почту."
+         ));
+        
     }
 
+    
     public static Result activationLogin(String key) {
         return TODO;
     }
 
+    
     public static Result forgotPassword() {
         return TODO;
     }
 
+    
     @Security.Authenticated(Secured.class)
     public static Result changePassword() {
-        return ok(changePass.render("Change Pass"));
+    	Long userId = Long.parseLong(session().get("userId"));
+    	User user = User.find.byId(userId);
+    	if (user.isFirstVisit()) {
+    		user.visitCount++;
+    		user.update();
+    		return ok(changePass.render("Вы здесь первый раз ?! Добро пожаловать на форум ! Пожалуйста смените пароль",""));
+    	} else { 
+    		return ok(changePass.render("Смена пароля",""));
+    	}
     }
-
+    
     
     public static Result update() {
-    	return ok();
+    	DynamicForm form = Form.form().bindFromRequest();
+    	if (User.wrongPass(form.get("password")))
+    		return badRequest(changePass.render("","Слишком короткий пароль"));
+    	if (!User.isMatch(form.get("password"), form.get("repeat")))
+    		return badRequest(changePass.render("","Пароли не совпадают"));
+        Long userId = Long.parseLong(session().get("userId"));
+        User user = User.find.byId(userId);
+        user.setPassword(form.get("password"));
+        user.update();
+    	return redirect(routes.Users.cabinet());
     }
+    
+    
     /**
      * Отправка письма с паролем зарегистрированному пользователю
      * см. https://github.com/typesafehub/play-plugins/tree/master/mailer
@@ -192,6 +214,7 @@ public class Users extends Controller {
         mail.send(registrationLetter.render(user).toString());
     }
 
+    
     /**
      * Личный кабинет пользователя
      */
@@ -204,21 +227,17 @@ public class Users extends Controller {
 //        for(Topic topic: topics) {
 //            System.out.println(topic.author.fullName);
 //        }
-
         return ok(index.render());
     }
-
-
+    
+    
     public static Result show(Long id) {
         User user = User.find.byId(id);
-        if (user != null) {
-            return ok(show.render(user));
-        } else {
-            return notFound(page404.render("Пользователь не найден!"));
-        }
+        if (user != null) return ok(show.render(user));
+        return notFound(page404.render("Пользователь не найден!"));
     }
-
-
+    
+    
     /**
      * Генерация строки случайных сиволов. Обчно используют для паролей и уникальных ключей
      *
@@ -235,6 +254,4 @@ public class Users extends Controller {
         }
         return code;
     }
-
-
 }

@@ -19,6 +19,12 @@ public class Topic extends Model {
 
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Код темы
      */
     @Id

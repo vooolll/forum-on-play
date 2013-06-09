@@ -186,4 +186,19 @@ public class User extends Model {
     public boolean isFirstVisit() {
     	return visitCount == 1;
     }
+    
+    
+    public static boolean isMatch(String pass, String repeat) {
+    	return pass.equals(repeat);
+    }
+    
+    public static boolean wrongPass(String pass) {
+    	if (pass == null) return true;
+    	if (pass.length() <= 5) return true;
+    	return false;
+    }
+    
+    public void setPassword(String password) { this.password = password; }
+    public String getPassword() { return password; }
+    public Long getId() { return id; }
 }

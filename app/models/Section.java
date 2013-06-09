@@ -19,6 +19,11 @@ import play.db.ebean.Model;
 public class Section extends Model {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Id раздела
      */
 	@Id
@@ -54,15 +59,9 @@ public class Section extends Model {
 		return find.all();
 	}
 	
-	public Long getId() {
-		return id;
-	}
+	public Long getId() { return id; }
 	
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 	
-	public List<Topic> getTopics() {
-		return topics;
-	}
+	public List<Topic> getTopics() { return topics; }
 }

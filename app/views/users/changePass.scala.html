@@ -1,9 +1,38 @@
 @* changePass Template File *@
-@(param: Any)
+@(reason: String, error: String)
 @import helper._
 @main.carcass(title="Смена пароля"){
-	<h1>Change password</h1>
-	@form(action=routes.Users.update(), args = 'class ->"form-vertical"){
-	}
-	
+	<h1 align="center">[Смените пароль]</h1>
+	<hr>
+	<div class="span9 offset1">
+		<div class="span9 offset1"><p class="lead">@reason</p></div>
+		@if(error != "") {
+		<div class="alert alert-error">
+                @error
+        </div>
+        }
+		<fieldset>
+		<div class="span5 offset2">
+		@form(action=routes.Users.update(), args = 'class ->"form-horizontal"){
+			<div class="control-group">
+				<label class="control-label" for="inputEmail">Пароль</label>
+				<div class="controls">
+					<input type="password" name="password" class="input-xlarge">
+				</div>
+			</div>
+		 	<div class="control-group">
+				<label class="control-label" for="inputPassword">Повторите пароль</label>
+				<div class="controls">
+					<input type="password" name="repeat" class="input-xlarge">
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<input type="submit" class="btn btn-large btn-primary" value="Изменить">
+				</div>
+			</div>
+		}
+		</fieldset>
+		<div>
+	</div>
 }

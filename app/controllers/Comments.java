@@ -34,16 +34,13 @@ public class Comments extends Controller {
 	 */
 	public static Result save(Long id) {
 		Form <Comment> filledForm = formComment.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			return badRequest(create.render(Post.find.byId(id), filledForm));
-		} else {
-			Comment comment = filledForm.get();
-			comment.post = Post.find.byId(id);
-			comment.author = User.loggedUser();
-			comment.save();
-			
-			return redirect(routes.Posts.list(Post.find.byId(id).topic.id));
-		}
-	}
-	
+		if (filledForm.hasErrors())
+			return badRequest(create.render(Post.find.byId(id), filledForm));	
+		
+		Comment comment = filledForm.get();
+		comment.post = Post.find.byId(id);
+		comment.author = User.loggedUser();
+		comment.save();	
+		return redirect(routes.Posts.list(Post.find.byId(id).topic.id));
+	}	
 }
