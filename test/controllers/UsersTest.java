@@ -39,8 +39,12 @@ public class UsersTest extends BaseControllerTest{
 	
 	@Test
 	public void testChangePassword() {
+		User oldUser = new User();
+		oldUser.id = 3L;
+		oldUser.password = "Not izmail";
+		oldUser.save();
 		Result changeAction = callAction(controllers.routes.ref.Users.changePassword(),
-				fakeRequest().withSession("userId", "1"));
+				fakeRequest().withSession("userId", "3"));
 		//assertThat(contentAsString(changeAction)).contains("[Смените пароль]");
 		assertThat(status(changeAction)).isEqualTo(OK); 
 	}
