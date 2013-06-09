@@ -110,8 +110,9 @@ public class Post extends Model implements Uploadable{
 	public String toString() {
 		return id + " " + text;
 	}
-	
+
 	public void setText(String newText) {
 		text = newText;
 	}
+	
 }

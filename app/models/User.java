@@ -91,7 +91,7 @@ public class User extends Model {
      * Количество авторизаций на сйте
      */
     @Column(nullable = false)
-    public Integer loginsCount = 0;
+    public Integer visitCount = 0;
 
     /**
      * Дата и время последнего посещения сайта
@@ -182,4 +182,8 @@ public class User extends Model {
     	return o instanceof User && ((User)o).id.equals(this.id);
     }
 
+    
+    public boolean isFirstVisit() {
+    	return visitCount == 1;
+    }
 }

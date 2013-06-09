@@ -45,7 +45,7 @@ create table users (
   password                  varchar(255),
   role                      integer,
   registred_at              timestamp not null,
-  logins_count              integer not null,
+  visit_count               integer not null,
   last_login                timestamp,
   token                     varchar(255),
   service_link              varchar(255),

@@ -2,10 +2,11 @@ package controllers;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.*;
-
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.contentAsString;
+import static play.test.Helpers.fakeRequest;
+import static play.test.Helpers.status;
 import models.Section;
-import models.Topic;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,8 +38,9 @@ public class TopicsTest extends BaseControllerTest{
 	
 	@Test
 	public void testCallCreate() {
-		Result result = callAction(controllers.routes.ref.Topics.create(1L));
-		assertThat(status(result)).isEqualTo(SEE_OTHER); //not logged, redirected
+		Result result = callAction(controllers.routes.ref.Topics.create(1L),
+				fakeRequest().withSession("userId", "1"));
+		assertThat(status(result)).isEqualTo(OK); 
 	}
 	
 	

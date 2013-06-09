@@ -24,6 +24,7 @@ POST    /registration                 controllers.Users.registrationProcessed()
 # TODO Восстановление пароля
 GET     /forgot_password              controllers.Users.forgotPassword()
 GET     /change_password              controllers.Users.changePassword()
+POST    /update                       controllers.Users.update()
 
 # TODO Личный кабинет
 GET     /cabinet                      controllers.Users.cabinet()

@@ -20,6 +20,7 @@ import views.html.users.registration;
 import views.html.users.registrationLetter;
 import views.html.users.show;
 import views.html.users.cabinet.index;
+import views.html.users.changePass;
 
 import com.typesafe.plugin.MailerAPI;
 import com.typesafe.plugin.MailerPlugin;
@@ -100,14 +101,14 @@ public class Users extends Controller {
             // Создание новой сессии для пользователя
             session().clear();
             session("userId", loginForm.get().user.id.toString());
-
+            
             // Обновление статистики входов пользователя в БД
             User user = loginForm.get().user;
             user.lastLogin = new Date();
-            user.loginsCount++;
+            user.visitCount++;
             user.update();
-
-
+            
+            
             // Переадресация после логина
             if (loginForm.get().redirect == null || loginForm.get().redirect.isEmpty()) {
                 return redirect(routes.Sections.list());
@@ -172,9 +173,13 @@ public class Users extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result changePassword() {
-        return TODO;
+        return ok(changePass.render("Change Pass"));
     }
 
+    
+    public static Result update() {
+    	return ok();
+    }
     /**
      * Отправка письма с паролем зарегистрированному пользователю
      * см. https://github.com/typesafehub/play-plugins/tree/master/mailer

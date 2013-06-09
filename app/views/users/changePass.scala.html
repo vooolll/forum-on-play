@@ -1,0 +1,9 @@
+@* changePass Template File *@
+@(param: Any)
+@import helper._
+@main.carcass(title="Смена пароля"){
+	<h1>Change password</h1>
+	@form(action=routes.Users.update(), args = 'class ->"form-vertical"){
+	}
+	
+}
