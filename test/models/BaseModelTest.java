@@ -1,6 +1,8 @@
 package models;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,16 +14,22 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.config.dbplatform.H2Platform;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
-
+import com.typesafe.plugin.MailerAPI;
+import com.typesafe.plugin.MailerPlugin;
+import controllers.actors.Mails;
+import play.GlobalSettings;
 import play.test.FakeApplication;
 import play.test.Helpers;
 
+
 public class BaseModelTest {
+	
+	
 	public static FakeApplication app;
 
 	@BeforeClass
-	public static void startApp() {
-		app = Helpers.fakeApplication(Helpers.inMemoryDatabase());
+	public static void startApp() {	
+		app = Helpers.fakeApplication(new Global());
 		Helpers.start(app);
 	}
 
@@ -42,4 +50,9 @@ public class BaseModelTest {
 		// Create
 		ddl.runScript(false, ddl.generateCreateDdl());
 	}
+}
+
+
+class Global extends GlobalSettings{
+	
 }

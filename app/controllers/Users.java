@@ -11,6 +11,7 @@ import play.data.Form;
 import play.data.validation.Constraints;
 import play.db.ebean.Model.Finder;
 import play.i18n.Messages;
+import play.libs.Akka;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -19,19 +20,11 @@ import views.html.main.success;
 import views.html.users.changePass;
 import views.html.users.login;
 import views.html.users.registration;
-import views.html.users.registrationLetter;
 import views.html.users.show;
 import views.html.users.cabinet.index;
-import static play.libs.Akka.future;
-import play.libs.F.*;
-import java.util.concurrent.Callable;
-
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-
-import com.typesafe.plugin.MailerAPI;
-import com.typesafe.plugin.MailerPlugin;
 
 import controllers.actors.Mails;
 import controllers.actors.MailsActor;
@@ -153,7 +146,6 @@ public class Users extends Controller {
     /**
      * Обработка формы регистрации пользователя
      */
-    @SuppressWarnings("deprecation")
 	public static Result registrationProcessed() {
         Form<Registration> registrationForm = Form.form(Registration.class).bindFromRequest();
         if (registrationForm.hasErrors()) 
@@ -163,22 +155,16 @@ public class Users extends Controller {
         user.email = registrationForm.get().email;
         user.fullName = registrationForm.get().fullName;
         user.password = generateRandomString(8);
-        user.save();
+        user.save(); 
         
+        // Высылка письма (Другим потоком)
+        ActorSystem system = Akka.system();
+        ActorRef mailAk = system.actorOf(new Props(MailsActor.class), "mailer");
+        mailAk.tell(new Mails(user), mailAk);
         
-        // Высылка письма
         
         // Сообщение юзеру
-
-        ActorSystem system = ActorSystem.create("MySystem");
-        ActorRef mailer = system.actorOf(new Props(MailsActor.class), "mailer");
-        String from = play.Play.application().configuration().getString("smtp.from");
-        MailerAPI plugin = play.Play.application().plugin(MailerPlugin.class).email();
-        mailer.tell(new Mails(user, from , plugin));
-        
-        
-        
-		  return ok(success.render(
+		return ok(success.render(
                   "Регистрация прошла успешно",
                   "Регистрация прошла успешно! В течении нескольких минут вам придёт письмо на электронную почту."
           ));

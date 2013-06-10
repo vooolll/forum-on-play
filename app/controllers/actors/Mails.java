@@ -2,11 +2,12 @@ package controllers.actors;
 
 import java.io.Serializable;
 
+
 import models.User;
 import play.i18n.Messages;
 import views.html.users.registrationLetter;
-
 import com.typesafe.plugin.MailerAPI;
+
 
 public class Mails implements Serializable {
 	/**
@@ -14,21 +15,19 @@ public class Mails implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	static MailerAPI mail;
-	static User destinationUser;
-	static String messageFrom;
+	public static MailerAPI plugin;
+	static User user;
+	public static String from;
 	
 	
-	public Mails(User user, String from, MailerAPI plugin) {
-		destinationUser = user;
-		mail = plugin;
-        messageFrom = from;
+	public Mails(User newUser) {
+		user = newUser;
 	}
 	
     public static void sendRegistrationLetter() {
-    	mail.setSubject(Messages.get("user.registration.letterTitle"));
-        mail.addRecipient(destinationUser.fullName + " <" + destinationUser.email + ">");
-        mail.addFrom(messageFrom);
-        mail.send(registrationLetter.render(destinationUser).toString());
+    	plugin.setSubject(Messages.get("user.registration.letterTitle"));
+    	plugin.addRecipient(user.fullName + " <" + user.email + ">");
+    	plugin.addFrom(from);
+    	plugin.send(registrationLetter.render(user).toString());
     }
 }
