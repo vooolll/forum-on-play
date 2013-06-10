@@ -200,6 +200,6 @@ public class User extends Model {
     
     public void setPassword(String password) { this.password = password; }
     public String getPassword() { return password; }
-    public Long getId() { return id; }
+    public Long getId() { return id; } 
     public String getFullName() { return fullName; }
 }

@@ -22,9 +22,19 @@ import views.html.users.registration;
 import views.html.users.registrationLetter;
 import views.html.users.show;
 import views.html.users.cabinet.index;
+import static play.libs.Akka.future;
+import play.libs.F.*;
+import java.util.concurrent.Callable;
+
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
 
 import com.typesafe.plugin.MailerAPI;
 import com.typesafe.plugin.MailerPlugin;
+
+import controllers.actors.Mails;
+import controllers.actors.MailsActor;
 
 
 public class Users extends Controller {
@@ -143,24 +153,35 @@ public class Users extends Controller {
     /**
      * Обработка формы регистрации пользователя
      */
-    public static Result registrationProcessed() {
+    @SuppressWarnings("deprecation")
+	public static Result registrationProcessed() {
         Form<Registration> registrationForm = Form.form(Registration.class).bindFromRequest();
         if (registrationForm.hasErrors()) 
             return badRequest(registration.render(registrationForm));
         // Сохранение записи в БД
-        User user = new User();
+        final User user = new User();
         user.email = registrationForm.get().email;
         user.fullName = registrationForm.get().fullName;
         user.password = generateRandomString(8);
         user.save();
-        // Высылка письма
-        sendRegistrationLetter(user);
-        // Сообщение юзеру
-        return ok(success.render(
-                 "Регистрация прошла успешно",
-                 "Регистрация прошла успешно! В течении нескольких минут вам придёт письмо на электронную почту."
-         ));
         
+        
+        // Высылка письма
+        
+        // Сообщение юзеру
+
+        ActorSystem system = ActorSystem.create("MySystem");
+        ActorRef mailer = system.actorOf(new Props(MailsActor.class), "mailer");
+        String from = play.Play.application().configuration().getString("smtp.from");
+        MailerAPI plugin = play.Play.application().plugin(MailerPlugin.class).email();
+        mailer.tell(new Mails(user, from , plugin));
+        
+        
+        
+		  return ok(success.render(
+                  "Регистрация прошла успешно",
+                  "Регистрация прошла успешно! В течении нескольких минут вам придёт письмо на электронную почту."
+          ));
     }
 
     
@@ -200,20 +221,6 @@ public class Users extends Controller {
         user.update();
     	return redirect(routes.Users.cabinet());
     }
-    
-    
-    /**
-     * Отправка письма с паролем зарегистрированному пользователю
-     * см. https://github.com/typesafehub/play-plugins/tree/master/mailer
-     */
-    private static void sendRegistrationLetter(User user) {
-        MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
-        mail.setSubject(Messages.get("user.registration.letterTitle"));
-        mail.addRecipient(user.fullName + " <" + user.email + ">");
-        mail.addFrom(play.Play.application().configuration().getString("smtp.from"));
-        mail.send(registrationLetter.render(user).toString());
-    }
-
     
     /**
      * Личный кабинет пользователя
