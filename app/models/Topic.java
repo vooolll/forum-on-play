@@ -56,7 +56,7 @@ public class Topic extends Model {
     /**
      * Время создания темы
      */
-    public Date cratedAt = new Date();
+    public Date createdAt = new Date();
     
 	/**
 	 * utility из ebean для поиска и выборки из базы данных
@@ -67,11 +67,14 @@ public class Topic extends Model {
 	/**
 	 * Организует темы в обратном порядке
 	 */
-	public static List<Topic> orderByDateDesc() {
-		List <Topic> myl = find.orderBy("crated_at desc").findList();
+	public static List<Topic> order() {
+		List <Topic> myl = find.where().order().desc("created_at").findList();
 		for (Topic t: myl) {
-			System.out.println(t.cratedAt);
+			System.out.println(t.createdAt);
 		}
 		return myl;
 	}
-}
+	
+	public void setName(String name) {this.name = name;}
+
+ }

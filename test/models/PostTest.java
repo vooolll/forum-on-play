@@ -45,4 +45,6 @@ public class PostTest extends BaseModelTest{
 		Post somePost = Post.find.where().eq("text", "hello kitty").findUnique();
 		assertThat(somePost).isNotNull();
 	}
+	
+
 }

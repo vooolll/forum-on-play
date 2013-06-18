@@ -25,7 +25,7 @@ public class Topics extends Controller {
 	}
 
 	/**
-	 * Action который перенаправляет в template (crtopic.scala.html) с
+	 * Action который перенаправляет в template (create.scala.html) с
 	 * List<Topic> который форма для создания новой темы
 	 * 
 	 * @return Result

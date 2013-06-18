@@ -34,7 +34,7 @@ create table topic (
   name                      varchar(255),
   section_id                bigint,
   author_id                 bigint,
-  crated_at                 timestamp,
+  created_at                timestamp,
   constraint pk_topic primary key (id))
 ;
 

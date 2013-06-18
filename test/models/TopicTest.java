@@ -1,6 +1,8 @@
 package models;
 
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,5 +59,18 @@ public class TopicTest extends BaseModelTest{
 		assertThat(someProg).isNull();
 	}
 	
+	@Test
+	public void testOrder() {
+		Topic one = new Topic();
+		one.setName("one");
+		one.save();
+		Topic two = new Topic();
+		two.setName("two");
+		two.save();
+		List <Topic> orderedTopics = Topic.order();
+		assertThat(orderedTopics).isNotNull();
+		assertThat(orderedTopics.size()).isEqualTo(3);
+		assertThat(orderedTopics.get(0).name).isEqualTo("two");
+	}
 	
 }

@@ -15,7 +15,7 @@
 		</div> <br>
    			<ul class="nav nav-tabs nav-stacked">
     		@if(section.topics != null) {
-        		@for(topic <- section.topics) {
+        		@for(topic <- Topic.order()) {
         			@if(String.valueOf(topic.author.id).equals(session().get("userId"))) {
             			<div align="right"><p class="icon-pencil"></p><a href="edit/@topic.id" ">edit</a></div>
             		}
