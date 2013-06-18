@@ -68,11 +68,7 @@ public class Topic extends Model {
 	 * Организует темы в обратном порядке
 	 */
 	public static List<Topic> order() {
-		List <Topic> myl = find.where().order().desc("created_at").findList();
-		for (Topic t: myl) {
-			System.out.println(t.createdAt);
-		}
-		return myl;
+		return find.where().order().desc("created_at").findList();
 	}
 	
 	public void setName(String name) {this.name = name;}

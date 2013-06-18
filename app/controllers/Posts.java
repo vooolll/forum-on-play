@@ -24,7 +24,6 @@ public class Posts extends Controller {
 	 * 
 	 * @return Result
 	 */
-    @Security.Authenticated(Secured.class)
 	public static Result list(Long id) {
 		return ok(list.render(Topic.find.byId(id)));
 	}

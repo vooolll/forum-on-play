@@ -1,4 +1,4 @@
-@(section: Section)
+@(section: Section, topics:List[Topic])
 @import helper._
 @main.carcass("Very simple forum") {
 	<h1 align="center">@section.name</h1>
@@ -14,13 +14,12 @@
 				<a  class="btn btn-primary" href="add/@section.id">Новая тема</a>
 		</div> <br>
    			<ul class="nav nav-tabs nav-stacked">
-    		@if(section.topics != null) {
-        		@for(topic <- Topic.order()) {
+    		@if(topics != null) {
+        		@for(topic <- topics) {
         			@if(String.valueOf(topic.author.id).equals(session().get("userId"))) {
             			<div align="right"><p class="icon-pencil"></p><a href="edit/@topic.id" ">edit</a></div>
             		}
             		<li><a href="posts/@topic.id">@topic.name</a><p align="right">@topic.posts.size() пост(ов)</p></li>
-            	
        			}
     		}
     		</ul>

@@ -12,7 +12,6 @@
     	@form(action = routes.Topics.save(section.id),args = 'class ->"form-vertical") {
 				@inputText( field = formTopic("name"), args =
                         '_label -> Messages.get("topic.creation.text") )
-	
 		<input class="btn btn-primary" type="submit" value="Новая тема">
 		}
 	</div>

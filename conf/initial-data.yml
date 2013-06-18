@@ -55,36 +55,3 @@ sections:
 #
 # Темы
 #
-topics:
-
-    - !!models.Topic
-        name: C/C++
-        section: !!models.Section
-                 id: 3
-        author: !!models.User
-                 email: admin@example.ru
-#
-# Посты
-#
-posts:
-
-    - !!models.Post
-        id:   1
-        text: Препроцессор языка С++\n\n\n Условия\n\nВ работе препроцессора "условием" называется директива, при выполнении которой часть программы игнорируется во время компиляции после проверки некоторых условий. В С препроцессоре в условии могут использоваться как арифметические выражения, так и имена определенных макросов.
-        topic:  !!models.Topic
-                name: C/C++
-        author: !!models.User
-                email: admin@example.ru
-
-#
-# Коментарии
-#
-comments:
-
-    - !!models.Comment
-        text: 'Подскажите, что делает #define TRUE FALSE ???'
-        post:  !!models.Post
-                id: 1
-        author: !!models.User
-                email: admin@example.ru
-

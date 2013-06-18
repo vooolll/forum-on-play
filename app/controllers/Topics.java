@@ -21,7 +21,7 @@ public class Topics extends Controller {
 	 * @param id
 	 */
 	public static Result list(Long id) {
-		return ok(list.render(Section.find.byId(id)));
+		return ok(list.render(Section.find.byId(id), Topic.order()));
 	}
 
 	/**
@@ -53,9 +53,7 @@ public class Topics extends Controller {
 		topic.save();
 		return redirect(routes.Topics.list(id));
 	}
-	/**
-	 * Перенаправляет на вью edit.scala.html
-	 */
+	
 	
 	public static Result edit(Long id) {
 		return TODO;
