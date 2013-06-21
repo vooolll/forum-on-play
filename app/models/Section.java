@@ -27,7 +27,7 @@ public class Section extends Model {
      * Id раздела
      */
 	@Id
-	public Long id;
+	public long id;
 
     /**
      * Название раздела

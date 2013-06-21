@@ -1,5 +1,6 @@
 package models;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,17 +29,18 @@ public class Topic extends Model {
      * Код темы
      */
     @Id
-    public Long id;
+    public long id;
 
 	
 	/**
 	 * Название
 	 */
 	@Required
-	public String name;
+	public String title;
     /**
      * Раздел, в который входит этот топик
      */
+	
     @ManyToOne
 	public Section section;
 
@@ -67,10 +69,13 @@ public class Topic extends Model {
 	/**
 	 * Организует темы в обратном порядке
 	 */
-	public static List<Topic> order() {
-		return find.where().order().desc("created_at").findList();
+	public static List<Topic> orderForSection(long id) {
+		return find.where().eq("section_id", id).findList();
 	}
 	
-	public void setName(String name) {this.name = name;}
+	public void setTitle(String title) {this.title = title;}
+	public String getTitle() {return title;}
+	public long getId() {return id;}
+	public User getAuthor() {return author;}
 
  }

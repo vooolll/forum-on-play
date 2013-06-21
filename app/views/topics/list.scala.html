@@ -19,7 +19,7 @@
         			@if(String.valueOf(topic.author.id).equals(session().get("userId"))) {
             			<div align="right"><p class="icon-pencil"></p><a href="edit/@topic.id" ">edit</a></div>
             		}
-            		<li><a href="posts/@topic.id">@topic.name</a><p align="right">@topic.posts.size() пост(ов)</p></li>
+            		<li><a href="posts/@topic.id">@topic.title</a><p align="right">@topic.posts.size() пост(ов)</p></li>
        			}
     		}
     		</ul>

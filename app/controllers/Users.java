@@ -104,7 +104,7 @@ public class Users extends Controller {
         } else {
             // Создание новой сессии для пользователя
             session().clear();
-            session("userId", loginForm.get().user.id.toString());
+            session("userId", loginForm.get().user.idAsString());
             
             // Обновление статистики входов пользователя в БД
             User user = loginForm.get().user;

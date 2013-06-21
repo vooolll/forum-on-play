@@ -1,5 +1,6 @@
 package models;
 
+
 import java.util.*;
 import javax.persistence.*;
 
@@ -50,7 +51,7 @@ public class User extends Model {
      * Код пользователя
      */
     @Id
-    public Long id;
+    public long id;
 
     /**
      * Полное имя пользователя
@@ -179,7 +180,7 @@ public class User extends Model {
     }
     
     public boolean equals(Object o) {
-    	return o instanceof User && ((User)o).id.equals(this.id);
+    	return o instanceof User && ((User)o).id == this.id;
     }
 
     
@@ -198,8 +199,10 @@ public class User extends Model {
     	return false;
     }
     
+    public String idAsString() { return String.valueOf(id); }
+    
     public void setPassword(String password) { this.password = password; }
     public String getPassword() { return password; }
-    public Long getId() { return id; } 
+    public long getId() { return id; } 
     public String getFullName() { return fullName; }
 }

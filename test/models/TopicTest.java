@@ -15,17 +15,22 @@ import static org.fest.assertions.Assertions.*;
 public class TopicTest extends BaseModelTest{
 	Topic extProg;
 	Topic someProg;
+	Section s;
 	
 	@Before
 	public void setUp() {
+		s = new Section();
+		s.name = "wa";
+		s.save();
 		extProg = new Topic();
-		extProg.name = "Extrime programming";
+		extProg.title = "Extrime programming";
+		extProg.section = s;
 		extProg.save();
 		
 	}
 
 	public void makeSelect() {
-		someProg = Topic.find.where().eq("name", "Extrime programming").findUnique();
+		someProg = Topic.find.where().eq("title", "Extrime programming").findUnique();
 	}
 	
 	@Test
@@ -38,7 +43,7 @@ public class TopicTest extends BaseModelTest{
 		Section programming = new Section();
 		extProg.section = programming;
 		assertThat(extProg.section).isNotNull();
-		assertThat(extProg.name, is("Extrime programming"));
+		assertThat(extProg.title, is("Extrime programming"));
 	}
 	
 	@Test
@@ -60,17 +65,19 @@ public class TopicTest extends BaseModelTest{
 	}
 	
 	@Test
-	public void testOrder() {
+	public void testOrderForSection() {
 		Topic one = new Topic();
-		one.setName("one");
+		one.setTitle("one");
+		one.section = s;
 		one.save();
 		Topic two = new Topic();
-		two.setName("two");
+		two.setTitle("two");
+		two.section = s;
 		two.save();
-		List <Topic> orderedTopics = Topic.order();
+		List <Topic> orderedTopics = Topic.orderForSection(s.id);
 		assertThat(orderedTopics).isNotNull();
 		assertThat(orderedTopics.size()).isEqualTo(3);
-		assertThat(orderedTopics.get(0).name).isEqualTo("two");
+		assertThat(orderedTopics.get(0).getTitle()).isEqualTo("two");
 	}
 	
 }

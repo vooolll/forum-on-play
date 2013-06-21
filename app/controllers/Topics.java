@@ -12,6 +12,7 @@ public class Topics extends Controller {
 	 */
 	static Form<Topic> formTopic = Form.form(Topic.class);
 
+	static Form<Post> firstPost = Form.form(Post.class);
 	
 	/**
 	 * Перенаправляет в topic\list.scala.html с List<Topic> ,
@@ -21,7 +22,7 @@ public class Topics extends Controller {
 	 * @param id
 	 */
 	public static Result list(Long id) {
-		return ok(list.render(Section.find.byId(id), Topic.order()));
+		return ok(list.render(Section.find.byId(id), Topic.orderForSection(id)));
 	}
 
 	/**
@@ -29,11 +30,11 @@ public class Topics extends Controller {
 	 * List<Topic> который форма для создания новой темы
 	 * 
 	 * @return Result
-	 *s
+	 *
 	 */
     @Security.Authenticated(Secured.class)
 	public static Result create(Long id) {
-		return ok(create.render(formTopic, Section.find.byId(id)));
+		return ok(create.render(formTopic, firstPost, Section.find.byId(id)));
 	}
 
 	/**
@@ -45,13 +46,20 @@ public class Topics extends Controller {
 	 */
 	public static Result save(Long id) {
 		Form<Topic> filledTopic = formTopic.bindFromRequest();
-		if (filledTopic.hasErrors()) 
-			return badRequest(create.render(filledTopic, Section.find.byId(id)));
+		Form<Post> filledPost = firstPost.bindFromRequest();
+		if (filledTopic.hasErrors() || filledPost.hasErrors()) 
+			return badRequest(create.render(filledTopic, firstPost, Section.find.byId(id)));
 		Topic topic = filledTopic.get();
+		Post post = filledPost.get();
 		topic.section = Section.find.byId(id);
 		topic.author = User.loggedUser();
+		post.topic = topic;
+		post.author = User.loggedUser();
 		topic.save();
-		return redirect(routes.Topics.list(id));
+		post.save();
+		Uploader.upload(post.id, "/public/images/post/", post);
+		post.save();
+		return redirect(routes.Posts.list(topic.id));
 	}
 	
 	

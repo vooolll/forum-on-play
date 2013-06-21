@@ -1,5 +1,6 @@
 package models;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 
 import org.joda.time.Interval;
 import org.joda.time.Period;
@@ -23,7 +25,7 @@ import play.db.ebean.Model;
  */
 
 @Entity
-public class Post extends Model implements Uploadable{
+public class Post extends Model{
 
 	/**
 	 * 
@@ -35,7 +37,7 @@ public class Post extends Model implements Uploadable{
 	 */
 	
 	@Id
-	public Long id;
+	public long id;
 	/**
 	 * Текст поста
 	 */
@@ -77,33 +79,25 @@ public class Post extends Model implements Uploadable{
 	public static Finder<Long, Post> find = new Finder<Long, Post>(Long.class,
 			Post.class);
 
-	@Override
 	public void setPath(String path) {
 		this.attachedImagePath = path;
 	}
 	
-	public static String getFormatedDate(Date d) {
-		String formatedDate = "";
-		Interval interval = new Interval(d.getTime(), new Date().getTime());
+	public static String getPeriod(Date date) {
+		
+		Interval interval = new Interval(date.getTime(), new Date().getTime());
 		Period period = interval.toPeriod();
 		
-		if (period.getMonths() != 0) {
-			formatedDate += String.valueOf(period.getMonths()) + " мес.";
-		} else if (period.getWeeks() != 0) {
-			formatedDate += String.valueOf(period.getWeeks()) + " нед.";
-		} else if (period.getDays() != 0) {
-			formatedDate += String.valueOf(period.getDays()) + " д.";
-		} else if (period.getHours() != 0) {
-			formatedDate += String.valueOf(period.getHours()) + " ч.";
-		} else if (period.getMinutes() != 0) {
-			formatedDate += String.valueOf(period.getMinutes()) + " мин.";
-		} else if (period.getSeconds() != 0) {
-			formatedDate += String.valueOf(period.getSeconds()) + " сек";
-		} else {
-			formatedDate = "0";
-		}
+		String strPeriod = "";
+		if 		(period.getMonths() != 0)	strPeriod += String.valueOf(period.getMonths()) + " мес.";
+		else if (period.getWeeks() != 0) 	strPeriod += String.valueOf(period.getWeeks()) + " нед.";
+		else if (period.getDays() != 0) 	strPeriod += String.valueOf(period.getDays()) + " д.";
+		else if (period.getHours() != 0) 	strPeriod += String.valueOf(period.getHours()) + " ч.";
+		else if (period.getMinutes() != 0) 	strPeriod += String.valueOf(period.getMinutes()) + " мин.";
+		else if (period.getSeconds() != 0) 	strPeriod += String.valueOf(period.getSeconds()) + " сек";
+		else 								strPeriod = "0";
 		
-		return formatedDate + " назад";
+		return strPeriod + " назад";
 	}
 	
 	@Override
@@ -111,8 +105,6 @@ public class Post extends Model implements Uploadable{
 		return id + " " + text;
 	}
 
-	public void setText(String newText) {
-		text = newText;
-	}
+	public void setText(String text) {this.text = text;}
 	
 }

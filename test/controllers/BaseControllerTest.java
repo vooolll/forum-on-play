@@ -21,9 +21,6 @@ public class BaseControllerTest {
 		Helpers.stop(app);
 	}
 	
-	
-
-
 }
 
 class Global extends GlobalSettings{

@@ -16,7 +16,6 @@ import controllers.actors.Mails;
 
 
 public class Global extends GlobalSettings{
-
 	
 	@Override
 	public void onStart(Application app) {
@@ -32,10 +31,8 @@ public class Global extends GlobalSettings{
 		public static void loadDataFor(Application app) {
 			if(Ebean.find(User.class).findRowCount() == 0) {
 				Map<String,List<Object>> data = (Map<String,List<Object>>)Yaml.load("initial-data.yml");
-				String [] columns = {"users", "sections", "topics"};
-				for (String column: columns) {
-					Ebean.save(data.get(column));
-				}
+				Ebean.save(data.get("users"));
+				Ebean.save(data.get("sections"));
 			}
 		}
 	}

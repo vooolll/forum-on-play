@@ -1,10 +1,9 @@
 @(topic: Topic)
-<!-- title-���������, myForm-scala ������ �����, dataList-���� � ������� ���� -->
 @import helper._
 @import java.util._
-@main.carcass(topic.name) {
+@main.carcass(topic.title) {
 	<div align="center">
-		<h1>@topic.name</h1>
+		<h1>@topic.title</h1>
 		
 		<hr>
 	</div>
@@ -14,11 +13,7 @@
 		<a class="btn btn-primary" href="/topics/posts/add/@topic.id">Новое сообщение</a>
 		
 		@if(topic.posts != null) {
-        		@for(post <- topic.posts) {
-        		<!-- field of class Post -->	
-        		
-        		
-        		
+        		@for(post <- topic.posts) {	
     	<div >
     		<div class="row">
     			<div class="span3">
@@ -31,7 +26,7 @@
             			<div align="right"><p class="icon-pencil"></p><a href="edit/@post.id" ">edit</a></div>
             		}
             		<p>@post.text</p>
-            		 <p align="right" class="text-small">@Post.getFormatedDate(post.createdAt)</p>
+            		 <p align="right" class="text-small">@Post.getPeriod(post.createdAt)</p>
             		@if(post.attachedImagePath != String.valueOf(post.id)) {
             		<a href="#increase@post.id"  data-toggle="modal">
             			<img class="img-polaroid" alt="img" src="@routes.Assets.at("images/post/"+post.attachedImagePath)" width="200" height="400">
@@ -64,7 +59,7 @@
             	<div class="span3"></div>
             	<div class="span5">	
             		<p id="comment-text" class="muted"><i class="icon-comment"></i> - @comment.text - <b class="text-info" id="comment-autor">@comment.author.fullName</b>
-            		<b> @Post.getFormatedDate(comment.createdAt)</b></p>
+            		<b> @Post.getPeriod(comment.createdAt)</b></p>
             		
             	</div>
             </div>

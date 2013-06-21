@@ -1,12 +1,9 @@
 package controllers;
 
-import java.io.File;
 
 import models.*;
 import play.data.Form;
 import play.mvc.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 import views.html.posts.*;
 
 public class Posts extends Controller {
@@ -49,12 +46,11 @@ public class Posts extends Controller {
 		Form<Post> filledPost = formPost.bindFromRequest();
 		if (filledPost.hasErrors()) 
 			return badRequest(create.render(Topic.find.byId(id), filledPost));
-
 		Post post = filledPost.get();
 		post.topic = Topic.find.byId(id);
 		post.author = User.loggedUser();
 		post.save();
-		upload(post.id, "/public/images/post/",post);
+		Uploader.upload(post.id, "/public/images/post/",post);
 		post.save();
 		return redirect(routes.Posts.list(id));
 	}
@@ -80,22 +76,6 @@ public class Posts extends Controller {
 	}
 	
 
-	public static void upload(Long id, String path, Uploadable model) {
-		// используем боди парсер что бы извлечь из формы файл
-		MultipartFormData body = request().body().asMultipartFormData();
-		FilePart picture = body.getFile("picture");
-		String fileName = picture.getFilename();
-		// записываем абсолютный путь в переменную
-		String absolutePath = System.getProperty("user.dir") + path +  id + fileName;
-		// создания манипуляции с файлом
-		File file = picture.getFile();
-		if (file.exists()) {
-			file.renameTo(new File(absolutePath));
-			// сохраняем абсолютный путь в модели
-			model.setPath(id + fileName);
-		} else {
-			model.setPath(null);
-		}
-	}
+
 
 }

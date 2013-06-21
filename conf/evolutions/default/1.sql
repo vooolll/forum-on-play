@@ -31,7 +31,7 @@ create table section (
 
 create table topic (
   id                        bigint not null,
-  name                      varchar(255),
+  title                     varchar(255),
   section_id                bigint,
   author_id                 bigint,
   created_at                timestamp,

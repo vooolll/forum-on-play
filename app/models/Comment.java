@@ -1,5 +1,6 @@
 package models;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class Comment extends Model {
      * Id коментария
      */
     @Id
-    public Long id;
+    public long id;
 
     /**
      * Текст коментария

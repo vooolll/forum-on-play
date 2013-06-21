@@ -1,4 +1,4 @@
-@(formTopic: Form[Topic],section: Section)
+@(formTopic: Form[Topic], firstPost: Form[Post], section: Section)
 @import helper._
 @import play.i18n._
 @main.carcass(section.name) {
@@ -9,10 +9,12 @@
 	
 	<div class="span12">
 		<p class="lead">Введите название темы:</p>
-    	@form(action = routes.Topics.save(section.id),args = 'class ->"form-vertical") {
-				@inputText( field = formTopic("name"), args =
+    	@form(action = routes.Topics.save(section.id),args = 'class ->"form-vertical",'enctype -> "multipart/form-data") {
+				@inputText( field = formTopic("title"), args =
                         '_label -> Messages.get("topic.creation.text") )
-		<input class="btn btn-primary" type="submit" value="Новая тема">
+                @textarea(field = firstPost("text"), '_label -> Messages.get("post.creation.text"))
+                <input type="file" name="picture" >
+				<input class="btn btn-primary" type="submit" value="Новая тема">
 		}
 	</div>
 }
