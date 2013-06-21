@@ -1,23 +1,40 @@
-package controllers;
+package controllers.actors;
 
 import java.io.File;
+import java.io.Serializable;
 
 import models.Post;
-
-import play.db.ebean.Model;
-import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Http.Request;
 
-public class Uploader{
+public class Uploader implements Serializable{
 
-	public static void upload(Long id, String path, Model model) {
-		Post post = (Post) model;
-		MultipartFormData body = Controller.request().body().asMultipartFormData();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	static long id;
+	static String path;
+	static Post post;
+	static Request request;
+	
+	public Uploader(long newId, String newPath, Post newPost, Request newRequest) {
+	    id = newId;
+		path = newPath;
+		post = newPost;
+		request = newRequest;
+	}
+
+	public static void upload() {
+		MultipartFormData body = request.body().asMultipartFormData();
 		FilePart picture = body.getFile("picture"); 
 		String fileName = picture.getFilename();
+		System.out.println(fileName);
 		// записываем абсолютный путь в переменную
 		String absolutePath = System.getProperty("user.dir") + path +  id + fileName;
+		System.out.println(absolutePath);
 		// создания манипуляции с файлом
 		File file = picture.getFile();
 		if (file.exists()) {
@@ -27,5 +44,6 @@ public class Uploader{
 		} else {
 			post.setPath(null);
 		}
+		post.save();
 	}
 }

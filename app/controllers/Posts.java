@@ -1,8 +1,14 @@
 package controllers;
 
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+import controllers.actors.Uploader;
+import controllers.actors.UploaderActor;
 import models.*;
 import play.data.Form;
+import play.libs.Akka;
 import play.mvc.*;
 import views.html.posts.*;
 
@@ -50,8 +56,13 @@ public class Posts extends Controller {
 		post.topic = Topic.find.byId(id);
 		post.author = User.loggedUser();
 		post.save();
-		Uploader.upload(post.id, "/public/images/post/",post);
-		post.save();
+		
+		ActorSystem system = Akka.system();
+		ActorRef uploader = system.actorOf(new Props(UploaderActor.class), "uploader1");
+		uploader.tell(new Uploader(post.id, "/public/images/post/",post, request()), uploader);
+		
+		
+		
 		return redirect(routes.Posts.list(id));
 	}
 

@@ -9,10 +9,6 @@ import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.route;
 import static play.test.Helpers.status;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import models.Section;
 
 import org.junit.After;
