@@ -1,15 +1,12 @@
 package controllers;
 
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import akka.actor.Props;
-import controllers.actors.Uploader;
-import controllers.actors.UploaderActor;
 import models.*;
-import play.data.*;
+import play.data.Form;
 import play.libs.Akka;
 import play.mvc.*;
 import views.html.topics.*;
+import akka.actor.*;
+import controllers.actors.*;
 
 public class Topics extends Controller {
 
@@ -27,7 +24,7 @@ public class Topics extends Controller {
 	 * @return Result
 	 * @param id
 	 */
-	public static Result list(Long id) {
+	public static Result list(long id) {
 		return ok(list.render(Section.find.byId(id), Topic.orderForSection(id)));
 	}
 
@@ -39,18 +36,14 @@ public class Topics extends Controller {
 	 *
 	 */
     @Security.Authenticated(Secured.class)
-	public static Result create(Long id) {
+	public static Result create(long id) {
 		return ok(create.render(formTopic, firstPost, Section.find.byId(id)));
 	}
 
-	/**
-	 * Проверяет правельно ли заполнена форма, создает тему и
-	 * перенаправляет в метод Topics.list(id)
-	 * 
-	 * @return Result
-	 * 
-	 */
-	public static Result save(Long id) {
+    
+    
+    @Security.Authenticated(Secured.class)
+	public static Result save(long id) {
 		Form<Topic> filledTopic = formTopic.bindFromRequest();
 		Form<Post> filledPost = firstPost.bindFromRequest();
 		if (filledTopic.hasErrors() || filledPost.hasErrors()) 
@@ -69,13 +62,27 @@ public class Topics extends Controller {
 		ActorSystem system = Akka.system();
 		ActorRef uploader = system.actorOf(new Props(UploaderActor.class), "uploader");
 		uploader.tell(new Uploader(post.id, "/public/images/post/",post, request()), uploader);
+		system.stop(uploader);
 		
 		post.save();
 		return redirect(routes.Posts.list(topic.id));
 	}
 	
 	
-	public static Result edit(Long id) {
-		return TODO;
+	public static Result edit(long id) {
+		Topic topic = Topic.find.byId(id);
+		formTopic = formTopic.fill(topic);
+		return ok(edit.render(topic, formTopic));
+	}
+	
+	
+	public static Result update(long id) {
+		Form <Topic> filledForm = formTopic.bindFromRequest();
+		if (filledForm.hasErrors())
+			return badRequest();
+		filledForm = formTopic.fill(Topic.find.byId(id)).bindFromRequest();
+		Topic topic = filledForm.get();
+		topic.update(id);
+		return redirect(routes.Topics.list(id));
 	}
 }

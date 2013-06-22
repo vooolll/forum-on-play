@@ -27,7 +27,7 @@ public class Posts extends Controller {
 	 * 
 	 * @return Result
 	 */
-	public static Result list(Long id) {
+	public static Result list(long id) {
 		return ok(list.render(Topic.find.byId(id)));
 	}
 
@@ -37,18 +37,18 @@ public class Posts extends Controller {
 	 * @param id
 	 * @return
 	 */
-	public static Result create(Long id) {
+	public static Result create(long id) {
 		return ok(create.render(Topic.find.byId(id), formPost));
 	}
 
 	/**
-	 * Проверяет правельно ли заполнена форма создает пост для какой то темы
+	 * Проверяет правильно ли заполнена форма создает пост для какой то темы
 	 * 
 	 * @param uri
 	 * @return Result
 	 * 
 	 */
-	public static Result save(Long id) {
+	public static Result save(long id) {
 		Form<Post> filledPost = formPost.bindFromRequest();
 		if (filledPost.hasErrors()) 
 			return badRequest(create.render(Topic.find.byId(id), filledPost));
@@ -58,8 +58,9 @@ public class Posts extends Controller {
 		post.save();
 		
 		ActorSystem system = Akka.system();
-		ActorRef uploader = system.actorOf(new Props(UploaderActor.class), "uploader1");
+		ActorRef uploader = system.actorOf(new Props(UploaderActor.class), "uploader");
 		uploader.tell(new Uploader(post.id, "/public/images/post/",post, request()), uploader);
+		system.stop(uploader);
 		
 		
 		
@@ -69,7 +70,7 @@ public class Posts extends Controller {
 	/**
 	 * Лайк ( повышение рейтинга сообщения )
 	 */
-	public static Result like(Long id, Long tID) {
+	public static Result like(long id, long tID) {
 		Post post = Post.find.byId(id);
 		if(!post.usersLiked.contains(User.loggedUser()))
 			post.usersLiked.add(User.loggedUser());
@@ -82,11 +83,7 @@ public class Posts extends Controller {
 	 * @param id
 	 * @return Result
 	 */
-	public static Result edit(Long id) {
+	public static Result edit(long id) {
 		return TODO;
 	}
-	
-
-
-
 }

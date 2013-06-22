@@ -1,0 +1,20 @@
+@* edit Template File *@
+@(topic: Topic, formTopic: Form[Topic])
+@import helper._
+@import play.i18n._
+@main.carcass("Title") {
+	<h1 align="center">Изменение темы</h1>
+	<hr>
+	<div class="span9 offset1">
+	@form(action = routes.Topics.update(topic.id)) {
+		 <fieldset>
+		 @inputText( field = formTopic("title"), args =
+                        '_label -> Messages.get("topic.creation.text") )
+                
+			<input type="submit" class="btn btn-primary" value="Сохранить">
+		</div>
+		 <fieldset>
+	}
+	</div>
+	
+}

@@ -8,6 +8,11 @@ import play.i18n.Messages;
 import views.html.users.registrationLetter;
 import com.typesafe.plugin.MailerAPI;
 
+/**
+ * Класс используемый актором MailsActor для отправки имэйлов
+ * @author Valery
+ *
+ */
 
 public class Mails implements Serializable {
 	/**

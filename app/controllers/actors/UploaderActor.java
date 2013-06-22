@@ -2,6 +2,12 @@ package controllers.actors;
 
 import akka.actor.UntypedActor;
 
+
+/**
+ * Akk актор для загрузки картинок
+ * @author Valery
+ *
+ */
 public class UploaderActor extends UntypedActor {
 
 	@Override

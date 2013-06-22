@@ -45,6 +45,7 @@ GET    /topics/:id		              controllers.Topics.list(id: Long)
 GET    /topics/add/:id 			      controllers.Topics.create(id:Long)
 GET    /topics/edit/:id               controllers.Topics.edit(id:Long)
 POST   /topics/save/:id 			  controllers.Topics.save(id: Long)
+POST   /topics/update/:id             controllers.Topics.update(id: Long)
 
 ###############################################################################
 # Сообщения форума

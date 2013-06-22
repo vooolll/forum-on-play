@@ -8,11 +8,13 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.Request;
 
+
+/**
+ * Класс используемый скала актором UploaderActor , отвечает за многопоточную загрузку файлов
+ */
+
 public class Uploader implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	static long id;
@@ -31,10 +33,8 @@ public class Uploader implements Serializable{
 		MultipartFormData body = request.body().asMultipartFormData();
 		FilePart picture = body.getFile("picture"); 
 		String fileName = picture.getFilename();
-		System.out.println(fileName);
 		// записываем абсолютный путь в переменную
 		String absolutePath = System.getProperty("user.dir") + path +  id + fileName;
-		System.out.println(absolutePath);
 		// создания манипуляции с файлом
 		File file = picture.getFile();
 		if (file.exists()) {

@@ -24,7 +24,7 @@ public class Comments extends Controller {
 	 * @param id
 	 * @return Result
 	 */
-	public static Result create(Long id) {
+	public static Result create(long id) {
 		return ok(create.render(Post.find.byId(id),formComment));
 	}
 	/**
@@ -32,7 +32,7 @@ public class Comments extends Controller {
 	 * @param id
 	 * @return Result
 	 */
-	public static Result save(Long id) {
+	public static Result save(long id) {
 		Form <Comment> filledForm = formComment.bindFromRequest();
 		if (filledForm.hasErrors())
 			return badRequest(create.render(Post.find.byId(id), filledForm));	

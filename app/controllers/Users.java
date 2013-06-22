@@ -161,7 +161,7 @@ public class Users extends Controller {
         ActorSystem system = Akka.system();
         ActorRef mailAk = system.actorOf(new Props(MailsActor.class), "mailer");
         mailAk.tell(new Mails(user), mailAk);
-        
+        system.stop(mailAk);
         
         // Сообщение юзеру
 		return ok(success.render(
@@ -194,7 +194,7 @@ public class Users extends Controller {
     	}
     }
     
-    
+    //TODO подумать о изменение DynamicForm на зарание заполненную форму
     public static Result update() {
     	DynamicForm form = Form.form().bindFromRequest();
     	if (User.wrongPass(form.get("password")))
@@ -224,7 +224,7 @@ public class Users extends Controller {
     }
     
     
-    public static Result show(Long id) {
+    public static Result show(long id) {
         User user = User.find.byId(id);
         if (user != null) return ok(show.render(user));
         return notFound(page404.render("Пользователь не найден!"));
